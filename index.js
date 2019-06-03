@@ -82,7 +82,7 @@ export default {
     onError(mOnError) {
         this._validateParam(mOnError, 'onError', 'function');
         events.addListener('onError', (response) => {
-            mOnRequestPaymentSession(response['code'], response['message']);
+            mOnError(response['code'], response['message']);
         });
     },
     /**
