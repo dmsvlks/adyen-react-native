@@ -63,7 +63,7 @@ public class AdyenModule extends ReactContextBaseJavaModule implements ActivityE
 
     @ReactMethod
     public void cancelPayment() {
-        Intent activityA = new Intent(getCurrentActivity(), getCurrentActivity().class);
+        Intent activityA = new Intent(getCurrentActivity(), getCurrentActivity().getClass());
         activityA.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         getCurrentActivity().startActivity(activityA);
     }
