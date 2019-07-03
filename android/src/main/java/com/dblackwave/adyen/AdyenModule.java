@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.os.CountDownTimer;
 
 import com.adyen.checkout.core.CheckoutException;
 import com.adyen.checkout.core.PaymentHandler;
@@ -35,6 +36,8 @@ import javax.annotation.Nullable;
 
 public class AdyenModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
+    private CountDownTimer countDownTimer;
+    
     private PaymentMethodHandler paymentMethodHandler;
 
     private PaymentReference paymentReference;
@@ -59,6 +62,18 @@ public class AdyenModule extends ReactContextBaseJavaModule implements ActivityE
 
     @ReactMethod
     public void startPayment() {
+        countDownTimer = new CountDownTimer(60000, 1000) {
+             public void onFinish() {
+                WritableMap params = Arguments.createMap();
+                params.putInt("code", 5);
+                params.putString("message", "timeout");
+                sendEvent(getReactApplicationContext(), "onError", params);
+                Log.d("Debug", error.getMessage());
+             }
+         }
+        
+        countDownTimer.start();
+        
         CheckoutController.startPayment(getCurrentActivity(), new CheckoutSetupParametersHandler() {
             @Override
             public void onRequestPaymentSession(@NonNull CheckoutSetupParameters checkoutSetupParameters) {
@@ -175,6 +190,8 @@ public class AdyenModule extends ReactContextBaseJavaModule implements ActivityE
     @Override
     public void onActivityResult(final Activity activity, final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == REQUEST_CODE_CHECKOUT) {
+            countDownTimer.cancel();
+            
             if (resultCode == PaymentMethodHandler.RESULT_CODE_OK) {
                 PaymentResult paymentResult = PaymentMethodHandler.Util.getPaymentResult(data);
                 WritableMap params = Arguments.createMap();
