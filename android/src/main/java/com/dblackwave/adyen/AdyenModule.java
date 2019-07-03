@@ -63,15 +63,17 @@ public class AdyenModule extends ReactContextBaseJavaModule implements ActivityE
     @ReactMethod
     public void startPayment() {
         countDownTimer = new CountDownTimer(60000, 1000) {
-             public void onFinish() {
+            public void onTick(long millisUntilFinished) {
+            }
+
+            public void onFinish() {
                 WritableMap params = Arguments.createMap();
                 params.putInt("code", 5);
                 params.putString("message", "timeout");
                 sendEvent(getReactApplicationContext(), "onError", params);
-                Log.d("Debug", error.getMessage());
-             }
-         }
-        
+            }
+        };
+
         countDownTimer.start();
         
         CheckoutController.startPayment(getCurrentActivity(), new CheckoutSetupParametersHandler() {
