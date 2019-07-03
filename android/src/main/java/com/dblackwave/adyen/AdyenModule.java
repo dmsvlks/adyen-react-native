@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.os.CountDownTimer;
+import android.content.Intent;
 
 import com.adyen.checkout.core.CheckoutException;
 import com.adyen.checkout.core.PaymentHandler;
@@ -58,6 +59,13 @@ public class AdyenModule extends ReactContextBaseJavaModule implements ActivityE
     @Override
     public String getName() {
         return "Adyen";
+    }
+
+    @ReactMethod
+    public void cancelPayment() {
+        Intent activityA = new Intent(getCurrentActivity(), getCurrentActivity().class);
+        activityA.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        getCurrentActivity().startActivity(activityA);
     }
 
     @ReactMethod
