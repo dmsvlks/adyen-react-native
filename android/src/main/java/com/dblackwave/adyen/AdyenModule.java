@@ -70,7 +70,7 @@ public class AdyenModule extends ReactContextBaseJavaModule implements ActivityE
 
     @ReactMethod
     public void startPayment() {
-        countDownTimer = new CountDownTimer(60000, 1000) {
+        countDownTimer = new CountDownTimer(1000 * 60 * 3, 1000) {
             public void onTick(long millisUntilFinished) {
             }
 
